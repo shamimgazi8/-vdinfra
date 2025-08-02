@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -16,70 +15,126 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Distribution, initialData } from '@/data/distributions';
-import { DropdownMenu } from '@/components/ui/dropdown-menu'; // and other Shadcn components
+import { DropdownMenu } from '@/components/ui/dropdown-menu';
+import { useDistributions } from '@/hooks/useDistributions';
+import { Distribution } from '@/types';
+import { DistributionTableSkeleton } from '../ui/Skelton';
+import { CircleAlert, CircleX, Hourglass, SearchCheck } from 'lucide-react';
 
 export const columns: ColumnDef<Distribution>[] = [
   {
-    accessorKey: 'label',
+    accessorKey: 'name',
     header: 'Label',
   },
   {
-    accessorKey: 'domain',
+    accessorKey: 'cname',
     header: 'Domain',
   },
   {
     accessorKey: 'status',
     header: 'Status',
-    cell: ({ row }) => {
-      // Use Tailwind to style the status indicators (dots)
-      const status = row.getValue('status');
-      const statusColor = {
-        Provisioning: 'text-sky-500',
-        Active: 'text-green-500',
-        Suspended: 'text-red-500',
-        Inactive: 'text-orange-500',
-      }[status as string] || 'text-gray-500';
 
-      return (
-        <div className="flex items-center gap-2">
-          <span className={`h-2 w-2 rounded-full ${statusColor}`}></span>
-          <span>{status as string}</span>
-        </div>
-      );
-    },
+
+cell: ({ row }) => {
+  const status = (row.getValue('status') as string)?.toLowerCase();
+
+  // Map statuses to icon components or color classes
+  const statusMap: Record<
+    string,
+    { icon?: React.ReactNode; colorClass: string }
+  > = {
+    provisioning: { icon: <Hourglass className="w-4 h-4 text-green-500" />, colorClass: 'text-black' },
+    active: { icon: <SearchCheck className="w-4 h-4 text-green-500" />, colorClass: 'text-black' },
+    suspended: { icon: <CircleX className="w-4 h-4 text-red-500" />, colorClass: 'text-black' },
+    inactive: { icon: <CircleAlert className="w-4 h-4 text-yellow-600" />, colorClass: 'text-black' },
+  };
+
+  // Fallback if unknown status
+  const { icon, colorClass } = statusMap[status] ?? { colorClass: 'text-gray-500' };
+
+  return (
+<div
+  className={`inline-flex items-center gap-2 capitalize p-2 border rounded-md max-w-max`}
+>
+  {/* Colored dot */}
+  <span className={`h-3 w-3 rounded-full ${colorClass} flex items-center justify-center`}>
+    {icon ? icon : null}
+  </span>
+  {/* Status text with matching color */}
+  <span className={colorClass}>{status ?? 'unknown'}</span>
+</div>
+
+  );
+}
+
   },
   {
-    accessorKey: 'dateModified',
+    accessorKey: 'updated_at',
     header: 'Date Modified',
+cell: ({ row }) => {
+  const date = new Date(row.getValue('updated_at'));
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',  // May
+    day: 'numeric',  // 11
+    year: 'numeric'  // 2025
+  }).format(date);
+}
+
   },
   {
-    accessorKey: 'time',
+    id: 'time',
     header: 'Time',
+cell: ({ row }) => {
+  const date = new Date(row.original.updated_at);
+  return new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  }).format(date);
+}
+
   },
   {
     id: 'actions',
     header: () => <span className="sr-only">Actions</span>,
-    cell: ({ row }) => {
-      // The actions dropdown menu
+    cell: ( ) => {
       return (
         <DropdownMenu>
-          {/* Dropdown Menu Trigger and Content from Shadcn */}
-          {/* ... */}
+
         </DropdownMenu>
       );
     },
   },
 ];
 
+
 export function DistributionTable() {
-  const [data, setData] = React.useState<Distribution[]>(initialData);
-  
+    const params = React.useMemo(() => ({
+    page: 1,
+    limit: 10,
+    sort: '-created_at',
+  }), []);
+  const {
+    data = [],
+    isLoading,
+    isError,
+  } = useDistributions(params);
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (isLoading) {
+    return <div className="p-6 text-center text-muted-foreground">
+      <DistributionTableSkeleton />
+    </div>;
+  }
+
+  if (isError) {
+    return <div className="p-6 text-center text-red-500">Failed to load distributions.</div>;
+  }
 
   return (
     <div className="rounded-md border">
@@ -91,10 +146,7 @@ export function DistributionTable() {
                 <TableHead key={header.id}>
                   {header.isPlaceholder
                     ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                    : flexRender(header.column.columnDef.header, header.getContext())}
                 </TableHead>
               ))}
             </TableRow>
