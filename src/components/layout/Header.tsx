@@ -37,7 +37,7 @@ export function Header() {
         </nav>
       </div>
  
-      <Button variant="default" className="bg-green-600 hover:bg-green-700 text-white">
+      <Button variant="default" className="bg-[#04A57D] hover:bg-green-700 text-white">
         + Create Distribution
       </Button>
     </header>

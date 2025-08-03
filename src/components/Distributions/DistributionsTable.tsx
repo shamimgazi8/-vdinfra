@@ -19,11 +19,16 @@ import { useDistributions } from '@/hooks/useDistributions';
 import { Distribution } from '@/types';
 import { DistributionTableSkeleton } from '../ui/Skelton';
 import {
+  BrushCleaning,
+  ChartNetwork,
   CircleAlert,
   CircleX,
   Hourglass,
   MoreVertical,
   SearchCheck,
+  Settings,
+  ShieldAlert,
+  Trash,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -32,12 +37,11 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 
-
 export const columns: ColumnDef<Distribution>[] = [
   {
     accessorKey: 'name',
     header: 'Label',
-    size:210, 
+    size: 210,
   },
   {
     accessorKey: 'cname',
@@ -47,7 +51,7 @@ export const columns: ColumnDef<Distribution>[] = [
   {
     accessorKey: 'status',
     header: 'Status',
-    size: 150, 
+    size: 150,
     cell: ({ row }) => {
       const status = (row.getValue('status') as string)?.toLowerCase();
 
@@ -120,7 +124,7 @@ export const columns: ColumnDef<Distribution>[] = [
     accessorKey: 'action',
     id: 'actions',
     header: () => <span className="sr-only">Actions</span>,
-    size: 10, 
+    size: 10,
     cell: ({ row }) => {
       const distribution = row.original;
 
@@ -131,18 +135,25 @@ export const columns: ColumnDef<Distribution>[] = [
               <MoreVertical className="w-4 h-4 text-muted-foreground" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-32 p-1">
-            <DropdownMenuItem onClick={() => console.log('View', distribution)}>
-              View
+          <DropdownMenuContent align="end" className="w-[200px] p-1">
+            <span className=' font-semibold pl-2 '>Actions</span>
+            <DropdownMenuItem className='pb-2 mb-2 border-b-[1px]' onClick={() => console.log('View', distribution)}>
+              <ChartNetwork />View Analytics
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => console.log('Edit', distribution)}>
-              Edit
+              <BrushCleaning />Purge
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => console.log('Edit', distribution)}>
+              <Settings />Manage
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => console.log('Edit', distribution)}>
+              <ShieldAlert />Disable
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => console.log('Delete', distribution)}
-              className="text-red-600"
+              className="text-red-600 pt-2 mt-2 border-t-[1px]"
             >
-              Delete
+             <Trash className=' text-red-600' /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -158,28 +169,27 @@ export function DistributionTable({
   createdAt,
   currentPage,
   rowsPerPage,
-  sort
+  sort,
 }: {
   search: string;
-  status: string[];
-  priority: string;
+  status: string[]; 
+  priority: string[];
   createdAt: string;
   currentPage: number;
   rowsPerPage: number;
-  sort: string
+  sort: string;
 }) {
-  const statusFilter = status.length
-    ? status.map((s) => s.toLowerCase()).join(',')
-    : undefined;
+  const statusFilter = status.length ? status.map((s) => s.toLowerCase()) : undefined;
+  const priorityFilter = priority.length ? priority.map((p) => p.toLowerCase()) : undefined;
 
   const { data = [], isLoading, isError } = useDistributions({
     page: currentPage,
     limit: rowsPerPage,
-    sort: sort,
+    sort,
     filter: {
       cname: search || undefined,
       status: statusFilter,
-      priority: priority || undefined,
+      priority: priorityFilter,
       created_at_from: createdAt || undefined,
       created_at_to: createdAt || undefined,
     },
