@@ -59,7 +59,7 @@ export function Sidebar({ sidebarOpen }: SidebarProps) {
           </span>
         )}
 
-        <div className="h-8 w-8 rounded-full bg-red-500 flex-shrink-0 mx-auto">
+        <div className="h-8 w-8 rounded-full bg-red-500 flex-shrink-0">
           <Image
             src={'/image.png'}
             alt="profile pc"

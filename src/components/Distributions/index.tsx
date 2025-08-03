@@ -13,8 +13,12 @@ function Distribution() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState('-created_at');
+  
+  
+  const [totalPages, setTotalPages]=useState(0)
 
-  const totalRows = 68;
+
+  const totalRows = 0;
 
   return (
     <>
@@ -38,6 +42,7 @@ function Distribution() {
           createdAt={createdAt}
           setCreatedAt={setCreatedAt}
           setSort={setSort}
+          
         />
 
         <DistributionTable
@@ -48,10 +53,13 @@ function Distribution() {
           sort={sort}
           currentPage={currentPage}
           rowsPerPage={rowsPerPage}
+          setTotalPages={setTotalPages}
+          setSort={setSort}
         />
 
         <Pagination
           totalRows={totalRows}
+          totalPages={totalPages}
           rowsPerPage={rowsPerPage}
           currentPage={currentPage}
           onRowsPerPageChange={(val) => {

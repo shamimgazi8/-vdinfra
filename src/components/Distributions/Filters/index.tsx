@@ -26,6 +26,7 @@ export const FilterDistributions = ({
   priority, setPriority,
   setSort,
   setCreatedAt,
+  
 }: {
   search: string;
   setSearch: (val: string) => void;

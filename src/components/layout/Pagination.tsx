@@ -8,6 +8,7 @@ interface PaginationProps {
   onRowsPerPageChange: (rows: number) => void;
   onPageChange: (page: number) => void;
   rowsPerPageOptions?: number[];
+  totalPages:number
 }
 
 export function Pagination({
@@ -16,9 +17,12 @@ export function Pagination({
   currentPage,
   onRowsPerPageChange,
   onPageChange,
-  rowsPerPageOptions = [5, 10, 20, 50],
+  totalPages,
+  rowsPerPageOptions = [10, 20, 50],
 }: PaginationProps) {
-  const totalPages = Math.ceil(totalRows / rowsPerPage);
+  const totalPage = totalPages;
+
+  
 
   return (
     <div className="flex flex-col md:flex-row items-start md:items-center justify-between py-2 text-sm text-gray-700 gap-4 mt-2">
@@ -50,7 +54,7 @@ export function Pagination({
 
         {/* Page info & controls */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span>{`Page ${currentPage} of ${totalPages}`}</span>
+          <span>{`Page ${currentPage} of ${totalPage}`}</span>
 
           <button
             onClick={() => onPageChange(1)}
@@ -72,7 +76,7 @@ export function Pagination({
 
           <button
             onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalPage}
             className="p-1 disabled:text-gray-300 hover:text-indigo-600 border rounded-md"
             aria-label="Next Page"
           >
@@ -80,8 +84,8 @@ export function Pagination({
           </button>
 
           <button
-            onClick={() => onPageChange(totalPages)}
-            disabled={currentPage === totalPages}
+            onClick={() => onPageChange(totalPage)}
+            disabled={currentPage === totalPage}
             className="p-1 disabled:text-gray-300 hover:text-indigo-600 border rounded-md"
             aria-label="Last Page"
           >
