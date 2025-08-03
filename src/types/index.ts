@@ -12,4 +12,6 @@ export interface Distribution {
   is_http2: boolean;
   is_http3: boolean;
   is_redirect_http_to_https: boolean;
+  priority: string;
+ currentPage: number; 
 }

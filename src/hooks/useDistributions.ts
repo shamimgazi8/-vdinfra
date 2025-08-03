@@ -9,32 +9,44 @@ export interface DistributionParams {
   filter?: {
     cname?: string;
     status?: string;
+    priority?: string;
     created_at_from?: string;
     created_at_to?: string;
   };
 }
 
-export const useDistributions = (params: DistributionParams) => {
-  const queryParams = new URLSearchParams();
+const buildQueryString = (params: DistributionParams): string => {
+  const query: string[] = [];
 
-  if (params.page) queryParams.append('page', String(params.page));
-  if (params.limit) queryParams.append('limit', String(params.limit));
-  if (params.sort) queryParams.append('sort', params.sort);
-  if (params.filter?.cname)
-    queryParams.append('filter[cname][like]', params.filter.cname);
-  if (params.filter?.status)
-    queryParams.append('filter[status][eq]', params.filter.status);
-  if (params.filter?.created_at_from && params.filter?.created_at_to)
-    queryParams.append(
-      'filter[created_at][between]',
-      `${params.filter.created_at_from},${params.filter.created_at_to}`
-    );
+  if (params.page) query.push(`page=${params.page}`);
+  if (params.limit) query.push(`limit=${params.limit}`);
+  if (params.sort) query.push(`sort=${params.sort}`);
+
+  const { filter } = params;
+  if (filter) {
+    if (filter.cname)
+      query.push(`filter[cname][like]=${encodeURIComponent(filter.cname)}`);
+    if (filter.status)
+      query.push(`filter[status][eq]=${encodeURIComponent(filter.status)}`);
+    if (filter.created_at_from && filter.created_at_to)
+      query.push(
+        `filter[created_at][between]=${encodeURIComponent(
+          `${filter.created_at_from},${filter.created_at_to}`
+        )}`
+      );
+  }
+
+  return query.join('&');
+};
+
+export const useDistributions = (params: DistributionParams) => {
+  const queryString = buildQueryString(params);
 
   return useQuery({
     queryKey: ['distributions', params],
     queryFn: async () => {
       const res = await api.get<{ data: Distribution[] }>(
-        `/v1/distributions?${queryParams.toString()}`
+        `/v1/distributions?${queryString}`
       );
       return res.data.data;
     },
