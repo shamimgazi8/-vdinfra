@@ -53,7 +53,7 @@ export function Header({ onToggleSidebar, sidebarOpen }: HeaderProps) {
         </nav>
       </div>
 
-      <Button variant="default" className="bg-[#04A57D] hover:bg-green-700 text-white">
+      <Button variant="default" className="bg-[#04A57D] hover:bg-green-700 text-white md:flex hidden">
         + Create Distribution
       </Button>
     </header>

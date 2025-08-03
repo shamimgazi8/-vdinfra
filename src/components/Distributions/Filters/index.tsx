@@ -99,8 +99,8 @@ export const FilterDistributions = ({
   };
 
   return (
-    <div className="flex justify-between flex-wrap gap-2 items-start pb-5 pt-2">
-      <div className="flex items-center gap-4 flex-wrap">
+    <div className="flex md:flex-row flex-col md:justify-between flex-wrap gap-2 items-start pb-5 pt-2">
+      <div className="flex md:flex-row flex-col md:items-center gap-4 flex-wrap">
         <SearchInput value={localSearch} onChange={setLocalSearch} />
 
         <MultiSelectPopover

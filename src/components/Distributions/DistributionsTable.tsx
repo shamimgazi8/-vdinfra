@@ -217,8 +217,11 @@ export function DistributionTable({
     );
   }
 
-  return (
-    <div className="w-full overflow-x-auto rounded-md border">
+return (
+  <div className="w-full rounded-md border">
+
+{/* Desktop table */}
+    <div className="hidden md:block w-full overflow-x-auto">
       <div className="min-w-[800px]">
         <Table>
           <TableHeader>
@@ -269,5 +272,40 @@ export function DistributionTable({
         </Table>
       </div>
     </div>
-  );
+{/* Mobile stacked view */}
+<div className="md:hidden w-full overflow-x-hidden">
+  <div className="flex flex-col items-start ml-2 gap-4 py-2">
+    {table.getRowModel().rows?.length ? (
+      table.getRowModel().rows.map((row) => (
+        <div
+          key={row.id}
+          className="w-[300px] max-w-full p-2 flex flex-col gap-4 border rounded-md bg-white shadow-sm box-border"
+        >
+          {row.getVisibleCells().map((cell) => (
+            <div
+              key={cell.id}
+              className="flex justify-between text-xs whitespace-nowrap overflow-hidden"
+            >
+              <span className="text-gray-500 font-medium capitalize">
+                {typeof cell.column.columnDef.header === 'string'
+                  ? cell.column.columnDef.header
+                  : cell.column.id}
+              </span>
+              <span className="text-gray-800 text-right max-w-[60%] truncate">
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </span>
+            </div>
+          ))}
+        </div>
+      ))
+    ) : (
+      <div className="text-xs text-gray-500 text-center py-6">
+        No results found!
+      </div>
+    )}
+  </div>
+</div>
+  </div>
+);
+
 }

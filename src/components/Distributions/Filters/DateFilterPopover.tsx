@@ -135,7 +135,7 @@ export const DateFilterPopover = ({
 
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={setOpen} >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -145,7 +145,7 @@ export const DateFilterPopover = ({
           {getButtonText()}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[800px] p-0" align="start">
+      <PopoverContent className="w-[800px] scale-[0.9]  p-0" align="start">
         <div className="flex">
           {/* Left Panel for Filter Presets */}
           <div className="flex w-64 flex-col p-4 border-r">

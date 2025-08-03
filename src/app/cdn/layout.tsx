@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Header } from '@/components/layout/Header';
 import React from 'react';
@@ -12,7 +12,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   function toggleSidebar() {
     setSidebarOpen((prev) => !prev);
   }
-
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768; 
+    setSidebarOpen(!isMobile);
+  }, []);
   return (
     <div className="flex h-screen">
 

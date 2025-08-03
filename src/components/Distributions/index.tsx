@@ -20,8 +20,8 @@ function Distribution() {
     <>
       <div className="flex items-center justify-between my-3">
         <div className="pl-6">
-          <h1 className="text-2xl font-bold">Distributions</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="md:text-2xl font-bold">Distributions</h1>
+          <p className="md:text-sm text-[10px] text-gray-500">
             Recently created CDN distribution from this organization.
           </p>
         </div>
