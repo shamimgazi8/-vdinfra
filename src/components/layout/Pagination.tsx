@@ -32,7 +32,7 @@ export function Pagination({
       {/* Pagination Controls */}
       <div className="flex items-center gap-2 whitespace-nowrap">
              {/* Rows per page */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mr-5">
         <label htmlFor="rowsPerPage" className="whitespace-nowrap">
           Rows per page
         </label>
@@ -40,7 +40,7 @@ export function Pagination({
           id="rowsPerPage"
           value={rowsPerPage}
           onChange={(e) => onRowsPerPageChange(Number(e.target.value))}
-          className="border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/10"
         >
           {rowsPerPageOptions.map((opt) => (
             <option key={opt} value={opt}>

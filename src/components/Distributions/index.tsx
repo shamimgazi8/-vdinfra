@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -13,6 +12,7 @@ import { Pagination } from '@/components/layout/Pagination';
   const [createdAt, setCreatedAt] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+    const [sort,setSort]=useState('-created_at')
   const totalRows = 68;
 
   return (
@@ -36,6 +36,7 @@ import { Pagination } from '@/components/layout/Pagination';
           setPriority={setPriority}
           createdAt={createdAt}
           setCreatedAt={setCreatedAt}
+          setSort={setSort}
         />
 
         <DistributionTable
@@ -43,7 +44,9 @@ import { Pagination } from '@/components/layout/Pagination';
           status={status}
           priority={priority}
           createdAt={createdAt}
+          sort={sort}
           currentPage={currentPage}
+          rowsPerPage={rowsPerPage}
         />
 
         <Pagination

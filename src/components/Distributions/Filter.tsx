@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { CalendarSearch, CirclePlus } from 'lucide-react';
+import { ArrowUpDown, CalendarSearch, CirclePlus } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useDebounce } from '@/hooks/useDebouncee';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -33,6 +33,8 @@ export const FilterDistributions = ({
   setPriority,
   createdAt,
   setCreatedAt,
+  setSort,
+  
 }: {
   search: string;
   setSearch: (val: string) => void;
@@ -42,11 +44,15 @@ export const FilterDistributions = ({
   setPriority: (val: string) => void;
   createdAt: string;
   setCreatedAt: (val: string) => void;
+  setSort:(val:string)=> void
 }) => {
   const [localSearch, setLocalSearch] = useState(search);
   const [statusSearch, setStatusSearch] = useState('');
   const debouncedSearch = useDebounce(localSearch, 600);
+  const [toggleSort,setToggleSort]= useState('ASC')
 
+
+  
   useEffect(() => {
     setSearch(debouncedSearch);
   }, [debouncedSearch, setSearch]);
@@ -78,7 +84,7 @@ export const FilterDistributions = ({
   };
 
   return (
-    <div>
+    <div className=' flex justify-between'>
       <div className="flex items-center gap-4 mb-4">
         <Input
           className="w-[200px]"
@@ -191,6 +197,23 @@ export const FilterDistributions = ({
           </PopoverContent>
         </Popover>
       </div>
+         <Button
+              variant="outline"
+              className="bg-white text-black border hover:bg-black hover:text-white"
+              onClick={()=>{
+                const Sort=toggleSort==='ASC'? 'created_at':'-created_at' ;
+                if(toggleSort==='ASC'){
+                  setToggleSort('DSC')
+                }else{
+                  setToggleSort('ASC')
+                }
+                setSort(Sort)
+              }}
+            
+            >
+              <ArrowUpDown className="mr-1" />
+              Sort
+            </Button>
     </div>
   );
 };
