@@ -131,8 +131,9 @@ export function DistributionTable({
     return <div className="p-6 text-center text-red-500">Failed to load distributions.</div>;
   }
 
-  return (
-    <div className="rounded-md border">
+return (
+  <div className="w-full overflow-x-auto rounded-md border">
+    <div className="min-w-[800px]">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -168,5 +169,7 @@ export function DistributionTable({
         </TableBody>
       </Table>
     </div>
-  );
+  </div>
+);
+
 }

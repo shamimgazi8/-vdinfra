@@ -21,7 +21,7 @@ export function Pagination({
   const totalPages = Math.ceil(totalRows / rowsPerPage);
 
   return (
-    <div className="flex items-center justify-between  py-2  text-sm text-gray-700 mt-2">
+    <div className="flex items-center justify-between py-[6px] text-sm text-gray-700 mt-2">
       {/* Selected Rows Info */}
       <div>
         {`0 of ${totalRows} row(s) selected.`}
