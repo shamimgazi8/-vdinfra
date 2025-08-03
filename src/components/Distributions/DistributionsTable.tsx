@@ -48,7 +48,7 @@ export const columns: ColumnDef<Distribution>[] = [
     accessorKey: 'name',
     header: 'Label',
     size: 210,
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     accessorKey: 'cname',
@@ -60,7 +60,7 @@ export const columns: ColumnDef<Distribution>[] = [
     accessorKey: 'status',
     header: 'Status',
     size: 150,
-    enableSorting: true,
+    enableSorting: false,
     cell: ({ row }) => {
       const status = (row.getValue('status') as string)?.toLowerCase();
 
@@ -85,7 +85,7 @@ export const columns: ColumnDef<Distribution>[] = [
     accessorKey: 'updated_at',
     header: 'Date Modified',
     size: 100,
-    enableSorting: true,
+    enableSorting: false,
     cell: ({ row }) => {
       const date = new Date(row.getValue('updated_at'));
       return new Intl.DateTimeFormat('en-US', {
@@ -164,7 +164,7 @@ export function DistributionTable({
   search: string;
   status: string[];
   priority: string[];
-  createdAt: string;
+  createdAt: { from: string; to: string; startTime: string; endTime: string }; // <-- updated
   currentPage: number;
   rowsPerPage: number;
   sort: string;
@@ -185,8 +185,8 @@ export function DistributionTable({
         cname: search || undefined,
         status: statusFilter,
         priority: priorityFilter,
-        created_at_from: createdAt || undefined,
-        created_at_to: createdAt || undefined,
+        created_at_from: createdAt.from || undefined,
+        created_at_to: createdAt.to || undefined,
       },
     }),
     [currentPage, rowsPerPage, sort, search, statusFilter, priorityFilter, createdAt]
@@ -243,7 +243,9 @@ export function DistributionTable({
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
                       style={{ width: header.getSize() }}
-                      className={`cursor-pointer select-none text-black/70 pl-3 ${header.column.getCanSort() ? 'hover:text-black' : ''}`}
+                      className={`cursor-pointer select-none text-black/70 pl-3 ${
+                        header.column.getCanSort() ? 'hover:text-black' : ''
+                      }`}
                     >
                       <div className="flex items-center gap-2">
                         {flexRender(header.column.columnDef.header, header.getContext())}
@@ -288,7 +290,10 @@ export function DistributionTable({
         <div className="flex flex-col items-start ml-2 gap-4 py-2">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <div key={row.id} className="w-[300px] max-w-full p-2 flex flex-col gap-4 border rounded-md bg-white shadow-sm box-border">
+              <div
+                key={row.id}
+                className="w-[300px] max-w-full p-2 flex flex-col gap-4 border rounded-md bg-white shadow-sm box-border"
+              >
                 {row.getVisibleCells().map((cell) => (
                   <div key={cell.id} className="flex justify-between text-xs whitespace-nowrap overflow-hidden">
                     <span className="text-gray-500 font-medium capitalize">

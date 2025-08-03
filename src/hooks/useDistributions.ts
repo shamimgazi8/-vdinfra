@@ -15,6 +15,16 @@ export interface DistributionParams {
   };
 }
 
+function formatDateToYYYYMMDD(dateStr?: string): string | undefined {
+  if (!dateStr) return undefined;
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return undefined; // invalid date
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 const buildQueryString = (params: DistributionParams): string => {
   const query: string[] = [];
 
@@ -27,7 +37,6 @@ const buildQueryString = (params: DistributionParams): string => {
     if (filter.cname)
       query.push(`filter[cname][like]=${encodeURIComponent(filter.cname)}`);
 
-    // Multiple status filters support
     if (Array.isArray(filter.status)) {
       filter.status.forEach((statusVal) => {
         query.push(`filter[status][eq]=${encodeURIComponent(statusVal)}`);
@@ -36,7 +45,6 @@ const buildQueryString = (params: DistributionParams): string => {
       query.push(`filter[status][eq]=${encodeURIComponent(filter.status)}`);
     }
 
-    // Multiple priority filters support
     if (Array.isArray(filter.priority)) {
       filter.priority.forEach((priorityVal) => {
         query.push(`filter[priority][eq]=${encodeURIComponent(priorityVal)}`);
@@ -45,11 +53,13 @@ const buildQueryString = (params: DistributionParams): string => {
       query.push(`filter[priority][eq]=${encodeURIComponent(filter.priority)}`);
     }
 
-    if (filter.created_at_from && filter.created_at_to)
+    // Format the dates here to YYYY-MM-DD only
+    const fromDate = formatDateToYYYYMMDD(filter.created_at_from);
+    const toDate = formatDateToYYYYMMDD(filter.created_at_to);
+
+    if (fromDate && toDate)
       query.push(
-        `filter[created_at][between]=${encodeURIComponent(
-          `${filter.created_at_from},${filter.created_at_to}`
-        )}`
+        `filter[created_at][between]=${encodeURIComponent(`${fromDate},${toDate}`)}`
       );
   }
 
@@ -62,9 +72,11 @@ export const useDistributions = (params: DistributionParams) => {
   return useQuery({
     queryKey: ['distributions', params],
     queryFn: async () => {
-      const res = await api.get<{ data: Distribution[] }>(
-        `/v1/distributions?${queryString}`
-      );
+      const res = await api.get<{
+        data: Distribution[];
+        meta: { total: number; totalPages: number };
+      }>(`/v1/distributions?${queryString}`);
+
       return res.data.data;
     },
   });

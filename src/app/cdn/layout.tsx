@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Header } from '@/components/layout/Header';
 import React from 'react';
+import { Toaster } from 'sonner';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -27,8 +28,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         <Header onToggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
 
-        <main className="p-[2px] flex-1 overflow-y-auto rounded-3xl bg-gray-100 border-[1px] m-4 mt-0">
+        <main className="p-1 flex-1 overflow-y-auto rounded-3xl bg-gray-100 border-[1px] m-4 mt-0 overflow-auto scrollbar-hide hover:scrollbar-auto ">
           {children}
+          <Toaster />
         </main>
       </div>
     </div>

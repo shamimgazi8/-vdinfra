@@ -1,32 +1,27 @@
 'use client';
-import * as React from "react";
-import { useEffect, useState } from "react";
-import { useDebounce } from "@/hooks/useDebouncee";
-import { CirclePlus } from "lucide-react";
-import { SearchInput } from "./SearchInput";
-import { MultiSelectPopover } from "./MultiSelectPopover";
-import { DateFilterPopover } from "./DateFilterPopover";
-import { SortButton } from "./SortButton";
 
-import { priorityMap, statusMap } from "@/lib/filtersMap";
-import { ResetFilters } from "./ResetButton";
+import { useState, useEffect } from 'react';
+import { CirclePlus } from 'lucide-react';
+import { SearchInput } from './SearchInput';
+import { MultiSelectPopover } from './MultiSelectPopover';
+import { DateFilterPopover } from './DateFilterPopover';
+import { SortButton } from './SortButton';
+import { priorityMap, statusMap } from '@/lib/filtersMap';
+import { ResetFilters } from './ResetButton';
 
 const statusOptions = ['Provisioning', 'Active', 'Suspended', 'Inactive'];
 const priorityOptions = ['Low', 'Medium', 'High'];
 
-type FilterValues = {
-  from: string;
-  to: string;
-  startTime: string;
-  endTime: string;
-};
 export const FilterDistributions = ({
-  search, setSearch,
-  status, setStatus,
-  priority, setPriority,
-  setSort,
+  search,
+  setSearch,
+  status,
+  setStatus,
+  priority,
+  setPriority,
+  createdAt,
   setCreatedAt,
-  
+  setSort,
 }: {
   search: string;
   setSearch: (val: string) => void;
@@ -34,20 +29,29 @@ export const FilterDistributions = ({
   setStatus: (val: string[]) => void;
   priority: string[];
   setPriority: (val: string[]) => void;
-  createdAt: string;
-  setCreatedAt: (val: string) => void;
+  createdAt: { from: string; to: string; startTime: string; endTime: string };
+  setCreatedAt: (val: { from: string; to: string; startTime: string; endTime: string }) => void;
   setSort: (val: string) => void;
 }) => {
   const [localSearch, setLocalSearch] = useState(search);
-  const [statusSearch, setStatusSearch] = useState("");
-  const [prioritySearch, setPrioritySearch] = useState("");
-  const [toggleSort, setToggleSort] = useState("ASC");
+  const [statusSearch, setStatusSearch] = useState('');
+  const [prioritySearch, setPrioritySearch] = useState('');
+  const [toggleSort, setToggleSort] = useState('ASC');
 
-  const debouncedSearch = useDebounce(localSearch, 600);
+  // Debounce search input (custom hook or npm package)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(localSearch);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [localSearch, setSearch]);
 
-  useEffect(() => setSearch(debouncedSearch));
-  useEffect(() => setLocalSearch(search), [search]);
+  // Keep localSearch in sync with external search
+  useEffect(() => {
+    setLocalSearch(search);
+  }, [search]);
 
+  // Toggle status filter
   const toggleStatus = (value: string) => {
     const lowerVal = value.toLowerCase();
     setStatus(
@@ -57,6 +61,7 @@ export const FilterDistributions = ({
     );
   };
 
+  // Toggle priority filter
   const togglePriority = (value: string) => {
     const lowerVal = value.toLowerCase();
     setPriority(
@@ -66,37 +71,19 @@ export const FilterDistributions = ({
     );
   };
 
-  const [filter, setFilter] = React.useState<FilterValues>({
-    from: "", 
-    to: "",
-    startTime: "00:00 AM",
-    endTime: "00:00 AM",
-  });
-
-  const handleFilterChange = (newFilter: FilterValues) => {
-    setFilter(newFilter);
-  };
-
-  // Check if any filter is active
   const isFilterActive =
-    localSearch !== "" ||
+    localSearch !== '' ||
     status.length > 0 ||
     priority.length > 0 ||
-    filter.from !== "" ||
-    filter.to !== "";
+    createdAt.from !== '' ||
+    createdAt.to !== '';
 
-  // Reset all filters function
+  // Reset all filters
   const resetAllFilters = () => {
-    setLocalSearch("");
+    setLocalSearch('');
     setStatus([]);
     setPriority([]);
-    setFilter({
-      from: "",
-      to: "",
-      startTime: "00:00 AM",
-      endTime: "00:00 AM",
-    });
-    setCreatedAt(""); 
+    setCreatedAt({ from: '', to: '', startTime: '00:00 AM', endTime: '00:00 AM' });
   };
 
   return (
@@ -115,10 +102,7 @@ export const FilterDistributions = ({
           iconMap={statusMap}
         />
 
-        <DateFilterPopover
-          value={filter}
-          onChange={handleFilterChange}
-        />
+        <DateFilterPopover value={createdAt} onChange={setCreatedAt} />
 
         <MultiSelectPopover
           icon={<CirclePlus className="mr-1" />}

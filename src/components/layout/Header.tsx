@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { ChevronRight, PanelRightOpen, PanelRightClose } from 'lucide-react';
+import { CreateDistributionDialog } from '../Distributions/CreateDistributions';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -52,10 +53,7 @@ export function Header({ onToggleSidebar, sidebarOpen }: HeaderProps) {
           </ol>
         </nav>
       </div>
-
-      <Button variant="default" className="bg-[#04A57D] hover:bg-green-700 text-white md:flex hidden">
-        + Create Distribution
-      </Button>
+        <CreateDistributionDialog />
     </header>
   );
 }

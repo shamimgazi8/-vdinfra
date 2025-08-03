@@ -8,17 +8,13 @@ import { Pagination } from '@/components/layout/Pagination';
 function Distribution() {
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<string[]>([]);
-  const [priority, setPriority] = useState<string[]>([]); // updated to string[]
-  const [createdAt, setCreatedAt] = useState('');
+  const [priority, setPriority] = useState<string[]>([]);
+  const [createdAt, setCreatedAt] = useState({ from: '', to: '', startTime: '00:00 AM', endTime: '00:00 AM' });
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState('-created_at');
-  
-  
-  const [totalPages, setTotalPages]=useState(0)
-
-
-  const totalRows = 0;
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalRows, setTotalRows] = useState(0);
 
   return (
     <>
@@ -31,7 +27,7 @@ function Distribution() {
         </div>
       </div>
 
-      <div className="bg-white p-5 rounded-lg shadow-md mb-0">
+      <div className="bg-white p-5 rounded-xl mb-0">
         <FilterDistributions
           search={search}
           setSearch={setSearch}
@@ -42,7 +38,6 @@ function Distribution() {
           createdAt={createdAt}
           setCreatedAt={setCreatedAt}
           setSort={setSort}
-          
         />
 
         <DistributionTable
@@ -50,9 +45,9 @@ function Distribution() {
           status={status}
           priority={priority}
           createdAt={createdAt}
-          sort={sort}
           currentPage={currentPage}
           rowsPerPage={rowsPerPage}
+          sort={sort}
           setTotalPages={setTotalPages}
           setSort={setSort}
         />
