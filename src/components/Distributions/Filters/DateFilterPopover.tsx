@@ -15,6 +15,7 @@ type FilterPreset = "all_time" | "last_8h" | "last_24h" | "last_7d" | "last_30d"
 export const DateFilterPopover = ({
   value,
   onChange,
+  
 }: {
   value?: { from?: string; to?: string };
   onChange: (val: { from: string; to: string; startTime: string; endTime: string }) => void;
@@ -31,7 +32,14 @@ export const DateFilterPopover = ({
   const [startTime, setStartTime] = React.useState("00:00 AM");
   const [endTime, setEndTime] = React.useState("00:00 AM");
   const [selectedPreset, setSelectedPreset] = React.useState<FilterPreset>("custom");
-
+  React.useEffect(() => {
+    if (!value?.from && !value?.to) {
+      setDateRange(undefined);
+      setStartTime("00:00 AM");
+      setEndTime("00:00 AM");
+      setSelectedPreset("custom");
+    }
+  }, [value]);
   const filterPresets = [
     { label: "All Time", value: "all_time" },
     { label: "Last 8 Hours", value: "last_8h" },
@@ -58,10 +66,11 @@ export const DateFilterPopover = ({
     }
   };
 
-  const handleCancel = () => {
+  // New function to clear the filter and close the popover
+  const handleClearFilter = () => {
     setDateRange(undefined);
-    setStartTime("00:00 AM"); // Reset startTime to its initial default value
-    setEndTime("00:00 AM");   // Reset endTime to its initial default value
+    setStartTime("00:00 AM");
+    setEndTime("00:00 AM");
     setOpen(false);
   };
 
@@ -205,7 +214,8 @@ export const DateFilterPopover = ({
                 </div>
               </div>
               <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={handleCancel}>Cancel</Button>
+                <Button variant="outline" onClick={() => setOpen(false)}>Close</Button>
+                <Button variant="outline" onClick={handleClearFilter}>Clear Filter</Button>
                 <Button className="bg-[#04A57D] hover:bg-[#04A57D]/90 text-white" onClick={handleApplyFilter}>Apply Filter</Button>
               </div>
             </div>

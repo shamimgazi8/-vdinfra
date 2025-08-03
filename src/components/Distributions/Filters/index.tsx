@@ -7,7 +7,9 @@ import { SearchInput } from "./SearchInput";
 import { MultiSelectPopover } from "./MultiSelectPopover";
 import { DateFilterPopover } from "./DateFilterPopover";
 import { SortButton } from "./SortButton";
+
 import { priorityMap, statusMap } from "@/lib/filtersMap";
+import { ResetFilters } from "./ResetButton";
 
 const statusOptions = ['Provisioning', 'Active', 'Suspended', 'Inactive'];
 const priorityOptions = ['Low', 'Medium', 'High'];
@@ -23,6 +25,7 @@ export const FilterDistributions = ({
   status, setStatus,
   priority, setPriority,
   setSort,
+  setCreatedAt,
 }: {
   search: string;
   setSearch: (val: string) => void;
@@ -61,19 +64,40 @@ export const FilterDistributions = ({
         : [...priority, value]
     );
   };
-// 1. Manage the state for the filter in this component
+
   const [filter, setFilter] = React.useState<FilterValues>({
-    from: new Date().toISOString(),
-    to: new Date().toISOString(),
+    from: "", 
+    to: "",
     startTime: "00:00 AM",
     endTime: "00:00 AM",
   });
 
-  // 2. Define the handler function that updates the state
   const handleFilterChange = (newFilter: FilterValues) => {
     setFilter(newFilter);
   };
-  console.log(filter, 'filter')
+
+  // Check if any filter is active
+  const isFilterActive =
+    localSearch !== "" ||
+    status.length > 0 ||
+    priority.length > 0 ||
+    filter.from !== "" ||
+    filter.to !== "";
+
+  // Reset all filters function
+  const resetAllFilters = () => {
+    setLocalSearch("");
+    setStatus([]);
+    setPriority([]);
+    setFilter({
+      from: "",
+      to: "",
+      startTime: "00:00 AM",
+      endTime: "00:00 AM",
+    });
+    setCreatedAt(""); 
+  };
+
   return (
     <div className="flex justify-between flex-wrap gap-2 items-start pb-5 pt-2">
       <div className="flex items-center gap-4 flex-wrap">
@@ -90,7 +114,10 @@ export const FilterDistributions = ({
           iconMap={statusMap}
         />
 
-      <DateFilterPopover value={filter} onChange={handleFilterChange} />
+        <DateFilterPopover
+          value={filter}
+          onChange={handleFilterChange}
+        />
 
         <MultiSelectPopover
           icon={<CirclePlus className="mr-1" />}
@@ -102,6 +129,8 @@ export const FilterDistributions = ({
           toggleValue={togglePriority}
           iconMap={priorityMap}
         />
+
+        {isFilterActive && <ResetFilters onReset={resetAllFilters} />}
       </div>
 
       <SortButton toggleSort={toggleSort} setToggleSort={setToggleSort} setSort={setSort} />
