@@ -4,9 +4,9 @@ import * as React from "react";
 
 export const ResetFilters = ({ onReset }: { onReset: () => void }) => {
   return (
-    <Button variant="ghost" onClick={onReset} className="p-2 h-auto text-primary">
+    <Button variant="ghost" onClick={onReset} className="p-2 h-auto text-primary border">
       <XCircle className="w-4 h-4 mr-1" />
-      Reset
+      Reset 
     </Button>
   );
 };

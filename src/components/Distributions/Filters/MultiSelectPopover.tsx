@@ -34,7 +34,7 @@ export const MultiSelectPopover = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="bg-white text-black border hover:bg-black hover:text-white">
+        <Button variant="outline" className="bg-white text-black border hover:bg-black hover:text-white border-dashed">
           {icon}
           {label}
         </Button>

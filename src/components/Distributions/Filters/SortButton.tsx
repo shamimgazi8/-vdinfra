@@ -19,7 +19,7 @@ export const SortButton = ({
   return (
     <Button
       variant="outline"
-      className="bg-white text-black border hover:bg-black hover:text-white"
+      className="bg-white text-black border hover:bg-black hover:text-white "
       onClick={handleSort}
     >
       <ArrowUpDown className="mr-1" />
