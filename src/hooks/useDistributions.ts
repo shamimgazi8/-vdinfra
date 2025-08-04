@@ -72,12 +72,16 @@ export const useDistributions = (params: DistributionParams) => {
   return useQuery({
     queryKey: ['distributions', params],
     queryFn: async () => {
-      const res = await api.get<{
+      try{
+            const res = await api.get<{
         data: Distribution[];
         meta: { total: number; totalPages: number };
       }>(`/v1/distributions?${queryString}`);
 
       return res.data.data;
+      }catch(err){
+        console.warn(err,'400 Bad Request - possibly invalid filters or input');
+      }
     },
   });
 };

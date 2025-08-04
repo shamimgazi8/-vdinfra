@@ -226,7 +226,7 @@ export function DistributionTable({
   }
 
   if (isError) {
-    return <div className="p-6 text-center text-red-500">Failed to load distributions.</div>;
+    return <div className="p-6 text-center text-red-500">Failed to load distributions❌</div>;
   }
 
   return (

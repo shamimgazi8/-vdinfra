@@ -35,14 +35,14 @@ A modern admin dashboard for managing and monitoring CDN content distributions. 
 ### 📊 Data Table
 - Pagination with `page` and `limit` controls
 - Column sorting with visual indicators
-- Responsive design (mobile and desktop optimized)
+- Responsive design (mobile and desktop )
 - Loading, empty, and error states
 
 ### 🔍 Filtering System
 - **CNAME**: Debounced text search
 - **Status**: Dropdown filter (`active`, `inactive`, `pending`)
 - **Created At**: From/to date range picker
-- All filters are synced with the URL via `nuqs` for sharable states
+- All filters are synced with the URL for sharable states
 
 ### 📄 Displayed Columns
 - **Label**
