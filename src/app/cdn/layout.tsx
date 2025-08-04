@@ -28,7 +28,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         <Header onToggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
 
-        <main className="p-1 flex-1 overflow-y-auto rounded-3xl bg-gray-100 border-[1px] m-4 mt-0 overflow-auto scrollbar-hide hover:scrollbar-auto ">
+        <main className="pl-1 pr-1 pb-1 flex-1 overflow-y-auto rounded-3xl bg-gray-100 border-[1px] m-4 mt-0 overflow-auto scrollbar-hide hover:scrollbar-auto ">
           {children}
           <Toaster />
         </main>

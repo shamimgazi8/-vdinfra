@@ -87,7 +87,7 @@ export const FilterDistributions = ({
   };
 
   return (
-    <div className="flex md:flex-row flex-col md:justify-between flex-wrap gap-2 items-start pb-5 pt-2">
+   <div className="md:sticky top-0 z-30 bg-white flex md:flex-row flex-col md:justify-between flex-wrap gap-2 items-start pb-5 pt-2">
       <div className="flex md:flex-row flex-col md:items-center gap-4 flex-wrap">
         <SearchInput value={localSearch} onChange={setLocalSearch} />
 
